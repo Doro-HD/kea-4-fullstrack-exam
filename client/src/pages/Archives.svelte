@@ -40,7 +40,7 @@
 
 <ProtectedRoute />
 
-<Columns colSize='8' borderLess=true>
+<Columns colSize='8' borderLess={true}>
   <svelte:fragment slot='left'>
     <Search
       on:searching={searchResult}

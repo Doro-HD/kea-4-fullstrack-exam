@@ -4,7 +4,7 @@
   import { BASE_URL } from "../stores/base";
   import Columns from '../lib/Columns.svelte'
   import SummaryCard from "../lib/SummaryCard.svelte";
-    import ProtectedRoute from "../lib/ProtectedRoute.svelte";
+  import ProtectedRoute from "../lib/ProtectedRoute.svelte";
 
 
   export let id

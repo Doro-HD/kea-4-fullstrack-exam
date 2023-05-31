@@ -4,7 +4,7 @@
   import ProtectedRoute from "../lib/ProtectedRoute.svelte";
   import { BASE_URL } from "../stores/base";
   import Columns from "../lib/Columns.svelte";
-    import Comments from "../lib/Comments.svelte";
+  import Comments from "../lib/Comments.svelte";
 
   const params = useParams()
 
