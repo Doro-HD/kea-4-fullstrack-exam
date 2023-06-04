@@ -5,6 +5,7 @@
   import Columns from '../lib/Columns.svelte'
   import SummaryCard from "../lib/SummaryCard.svelte";
   import ProtectedRoute from "../lib/ProtectedRoute.svelte";
+  import Search from "../lib/Search.svelte";
 
 
   export let id
@@ -56,6 +57,12 @@
   function redirectCreateCard() {
     navigate(`/archives/${id}/cards/create`)
   }
+
+  function seachResult(event) {
+    const data = event.detail
+
+    cards = data.cards
+  }
 </script>
 
 <ProtectedRoute />
@@ -63,7 +70,15 @@
 {#if hasFetchError}
   <p>{errorMessage}</p>
 {:else}
-  <Columns colSize=8>
+  <Columns colSize=8 borderLess={true}>
+    <svelte:fragment slot='left'>
+      <Search
+        on:searching={seachResult}
+        path='/protected/cards'
+        query='archiveId={id}'
+        resourceName='Card'
+      />
+    </svelte:fragment>
     <svelte:fragment slot='center'>
       <div class='text-center'>
         <h1 class='display-1'>{archiveTitle}</h1>
@@ -75,6 +90,7 @@
       {#each cards as card}
       	<SummaryCard
           title={card.name}
+          tags={card.tags}
           description={card.summary}
           resourceLink={`/archives/${id}/cards/${card._id}`}
           linkText='Look up card'

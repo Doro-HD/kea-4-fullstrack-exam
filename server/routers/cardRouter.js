@@ -12,7 +12,19 @@ router.get('/protected/cards', async (req, res) => {
     return
   }
 
-  const cards = await db.cards.find({ archiveId }).toArray()
+  const findOptions = { archiveId }
+
+  const name = req.query.name
+  if (name) {
+    findOptions.name = name
+  }
+
+  const tags = req.query.tags
+  if (tags) {
+    findOptions.tags = { $in: tags.split(' ') }
+  }
+
+  const cards = await db.cards.find(findOptions).toArray()
 
   res.send({ cards })
 })

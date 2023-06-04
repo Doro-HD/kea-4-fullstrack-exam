@@ -8,14 +8,16 @@
   import StaticDrawer from '../lib/StaticDrawer.svelte'
   import ArchiveForm from '../lib/ArchiveForm.svelte';
 
+  //isSelf defines weather it is the user's own archives that should be retrieved
   export let isSelf
 
-  const apiUrl = `/protected/archives?self=${isSelf}`
+  const apiUrl = `/protected/archives`
+  const query = 'self=true'
 
   let archives = []
 
   onMount(async () => {
-    const response = await fetch($BASE_URL + apiUrl, {
+    const response = await fetch($BASE_URL + apiUrl +  '?' + query, {
       credentials: 'include'
     })
 
@@ -44,10 +46,9 @@
   <svelte:fragment slot='left'>
     <Search
       on:searching={searchResult}
-      url={$BASE_URL + apiUrl }
-      options={{
-        credentials: 'include'
-      }}
+      path={apiUrl }
+      query={query}
+      resourceName='Archive'
     />
   </svelte:fragment>
   <svelte:fragment slot='center'>
@@ -68,6 +69,7 @@
     {#each archives as archive}
       <SummaryCard
         title={archive.archiveName}
+        tags={archive.tags}
         description={archive.description}
         resourceLink={'/archives/' + archive._id}
         linkText='Visit Archive'

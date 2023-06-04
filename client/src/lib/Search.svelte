@@ -1,8 +1,15 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { BASE_URL } from "../stores/base";
 
-  export let url
-  export let options = {}
+  export let path
+  export let query = ''
+  export let resourceName
+
+
+  if (query.length > 0) {
+    query += '&'
+  }
 
   let name = ''
   let tags = ''
@@ -10,17 +17,19 @@
   const dispatcher = createEventDispatcher()
 
   async function searchByName() {
-    let queryString = ''
+    let queryString = '?' + query
 
     if (name !== '') {
-      queryString += '&name=' + name
+      queryString += 'name=' + name + '&'
     }
 
     if (tags !== '') {
-      queryString += '&tags=' + tags
+      queryString += 'tags=' + tags
     }
 
-    const response = await fetch(url + queryString, options)
+    const response = await fetch($BASE_URL + path + queryString, {
+      credentials: 'include'
+    })
     const data = await response.json()
 
     dispatcher('searching', data)
@@ -29,13 +38,13 @@
 
 <form on:submit|preventDefault={searchByName}>
   <div class='mb-3'>
-    <label for='archive-name' class='form-label'>Archive name</label>
-    <input id='archive-name' type='text' class='form-control' bind:value={name}>
+    <label for='{resourceName}-name' class='form-label'>{resourceName} name</label>
+    <input id='{resourceName}-name' type='text' class='form-control' bind:value={name}>
   </div>
 
   <div class='mb-3'>
-    <label for='archive-tags' class='form-label'>Archive tags</label>
-    <input id='archive-tags' type='text' class='form-control' bind:value={tags}>
+    <label for='{resourceName}-tags' class='form-label'>{resourceName} tags</label>
+    <input id='{resourceName}-tags' type='text' class='form-control' bind:value={tags}>
   </div>
 
   <button type='submit' class='btn btn-outline-secondary'>Search</button>
